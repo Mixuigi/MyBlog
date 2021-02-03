@@ -7,6 +7,13 @@
     <title>Hello</title>
 </head>
 <body>
-
+{% for post in posts %}
+     <p>пост >>{{ post.slug }} текст>> {{ post.text_post }} опубликован: {{ post.post_date_published }}</p>
+     <p> {% for comment in comments %}
+            {% if post.id == comment.commented_post.id  %}
+             <p>комменченый пост >> {{ comment.commented_post }} текст коммента {{ comment.text_comment }} опубликован: {{ comment.comment_date_published}}</p>
+            {% endif %}
+    {% endfor %}
+{% endfor %}
 </body>
 </html>

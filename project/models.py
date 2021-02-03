@@ -18,7 +18,7 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    slug = models.ForeignKey(Post, on_delete=models.CASCADE)
+    commented_post = models.ForeignKey(Post, on_delete=models.CASCADE)
     text_comment = models.TextField(max_length=1000)
     comment_date_published = models.DateTimeField(blank=True, null=True)
 
