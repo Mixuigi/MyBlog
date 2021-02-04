@@ -5,8 +5,14 @@
     <title>Главная</title>
 </head>
 <body>
-<table>
-    {{ postform }}
-</table>
+<div>
+    <form method="post">
+        {% csrf_token %}
+        {{ postForm.slug }}<br>
+        {{ postForm.text_post }}<br>
+            <span>{{ error }}</span>
+        <button class="btn btn-success" type="submit">Добавить пост!</button>
+    </form>
+</div>
 </body>
 </html>

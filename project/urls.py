@@ -4,6 +4,6 @@ from . import views
 
 
 urlpatterns = [
-    path('posts/', views.index, name='index'),
-    path('', views.FormPost)
+    path('posts/', views.index, name='posts'),
+    path('posts/FormHead.html/', views.FormPost, name='add_post')
 ]

@@ -1,8 +1,6 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect
 from .models import Post, Comment
 from .forms import PostForm
-from django.utils import timezone
 
 
 def index(request):
@@ -13,5 +11,17 @@ def index(request):
 
 
 def FormPost(request):
-    postform = PostForm()
-    return render(request, 'FormHead.html', {'postform': postform})
+    error = ''
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('posts')
+        else:
+            error = 'данные введены некорректно'
+    form = PostForm()
+    data = {
+        'form': form,
+        'error': error,
+    }
+    return render(request, 'FormHead.html', data)
