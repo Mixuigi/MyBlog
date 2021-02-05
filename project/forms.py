@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm, TextInput,Textarea
+from django.forms import ModelForm, TextInput, Textarea
 from .models import Post, Comment
 
 
@@ -19,6 +19,19 @@ class PostForm(ModelForm):
             }),
         }
 
-#class CommentForm(forms.Form):
-    #text_comment = forms.CharField(max_length=1000, widget=forms.Textarea, label= 'комментарий')
 
+class CommentForm(forms.Form):
+    class Meta:
+        model = Comment
+        fields = ['commented_post', 'text_comment']
+
+        widgets = {
+            'commented_post': TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'комментарий'
+            }),
+            'text_comment': TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'комментарий'
+            }),
+        }

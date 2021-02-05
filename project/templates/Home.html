@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static "filecss.css" %}"/>
+    <title>Главная</title>
+</head>
+<body>
+<h1>
+    <a href="AddPosts/">добавить пост</a>
+</h1>
+{% for post in posts %}
+    <p>пост >>{{ post.slug }} текст>> {{ post.text_post }} опубликован: {{ post.post_date_published }}</p>
+    <a href="AddComments/">добавить комментарий</a>
+    <p> {% for comment in comments %}
+        {% if post.id == comment.commented_post.id %}
+            <p>комменченый пост >> {{ comment.commented_post }} текст коммента {{ comment.text_comment }}
+                опубликован: {{ comment.comment_date_published }}</p>
+        {% endif %}
+    {% endfor %}
+{% endfor %}
+
+</body>
+</html>

@@ -2,17 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Главная</title>
+   {% block title %} <title> Добавление поста </title>{% endblock title %}
 </head>
 <body>
+    {% block add %}
 <div>
     <form method="post">
         {% csrf_token %}
-        {{ postForm.slug }}<br>
-        {{ postForm.text_post }}<br>
+        {{ form.slug }}<br>
+        {{ form.text_post }}<br>
             <span>{{ error }}</span>
         <button class="btn btn-success" type="submit">Добавить пост!</button>
     </form>
 </div>
+    {% endblock add %}
 </body>
 </html>
