@@ -1,6 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
 #from django.utils import timezone
-#from django.conf import settings
+from django.conf import settings
 #import datetime
 
 
@@ -18,9 +19,13 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     commented_post = models.ForeignKey(Post, on_delete=models.CASCADE)
     text_comment = models.TextField(max_length=1000)
     comment_date_published = models.DateTimeField(blank=True, null=True, auto_now_add= True)
+
+    class Meta:
+        ordering = ('comment_date_published',)
 
     def __str__(self):
         return self.text_comment

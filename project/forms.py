@@ -20,16 +20,12 @@ class PostForm(ModelForm):
         }
 
 
-class CommentForm(forms.Form):
+class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['commented_post', 'text_comment']
+        fields = ['commented_post', 'text_comment', 'user']
 
         widgets = {
-            'commented_post': TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'комментарий'
-            }),
             'text_comment': TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'комментарий'
