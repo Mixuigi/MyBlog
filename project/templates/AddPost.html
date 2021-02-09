@@ -9,6 +9,7 @@
 <div>
     <form method="post">
         {% csrf_token %}
+        {{ form.user }}
         {{ form.slug }}<br>
         {{ form.text_post }}<br>
             <span>{{ error }}</span>

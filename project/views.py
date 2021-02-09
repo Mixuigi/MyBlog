@@ -1,15 +1,24 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.utils import timezone
+from django.contrib.auth import authenticate, login
+from .models import *
+from .forms import *
 
-from .models import Post, Comment
-from .forms import PostForm, CommentForm
 
-
-def index(request):
-    posts = Post.objects.all()
-    comments = Comment.objects.all()
-    return render(request, 'Home.html', {'posts': posts,
-                                         'comments': comments})
+def Registration(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(username=cd['username'], password=cd['password'])
+            if user is not None:
+                login(request, user)
+                return HttpResponse('Authenticated successfully')
+            else:
+                return HttpResponse('Invalid login')
+    else:
+        form = LoginForm()
+    return render(request, 'login.html', {'form': form})
 
 
 def FormPost(request):
@@ -19,7 +28,7 @@ def FormPost(request):
         form = PostForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('add_comments')
+            return redirect('Home_Page')
         else:
             error = 'данные введены некорректно'
     form = PostForm()
@@ -30,7 +39,8 @@ def FormPost(request):
     return render(request, 'AddPost.html', data)
 
 
-def FormComments(request):
+def Home(request):
+    user = User.objects.all()
     posts = Post.objects.all()
     comments = Comment.objects.all()
     comment = Comment.objects.filter(commented_post=posts)
@@ -52,5 +62,6 @@ def FormComments(request):
         'comment': comment,
         'posts': posts,
         'comments': comments,
+        'user': user,
     }
     return render(request, 'Home.html', data)

@@ -12,6 +12,7 @@
 </h1>
 
 {% for post in posts %}
+    {{ post.user }}<br>
     <p>пост >>{{ post.slug }} текст>> {{ post.text_post }} опубликован: {{ post.post_date_published }}</p>
     <form method="post">
         {% csrf_token %}
@@ -20,11 +21,13 @@
     </form>
     <p> {% for comment in comments %}
         {% if post.id == comment.commented_post.id %}
+                        Пользователь {{ comment.user }}<br>
             <p>комменченый пост >> {{ comment.commented_post }} текст коммента {{ comment.text_comment }}
                 опубликован: {{ comment.comment_date_published }}</p>
 
         {% endif %}
     {% endfor %}
+      ______________________________________________________________________________
 {% endfor %}
 
 
