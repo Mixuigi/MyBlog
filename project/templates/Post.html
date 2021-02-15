@@ -1,0 +1,31 @@
+{% extends 'Home.html' %}
+{% block title %}  Пост - {{ post.slug }} {% endblock title %}
+{% block all %}
+
+    <h1>
+        {{ post.slug }}<br>
+        {{ post.post_date_published }}<br>
+        {{ post.text_post }}<br>
+    </h1>
+    {% if new_comment %}
+    <h2>Your comment has been added.</h2>
+    {% else %}
+    <form method="post">
+        {{ form.as_p }}
+        {% csrf_token %}
+        <button class="btn btn-success" type="submit">Добавить комментарий!</button>
+    </form>
+    {% endif %}
+    {% for comment in comments %}
+
+        {% if post.id == comment.commented_post.id %}
+            <h2>
+                Пользователь {{ comment.user }}<br>
+                <p>комменченый пост >> {{ comment.commented_post }} текст коммента {{ comment.text_comment }}
+                    опубликован: {{ comment.comment_date_published }}</p>
+
+            </h2>
+        {% endif %}
+    {% endfor %}
+
+{% endblock all %}

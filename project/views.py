@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
-from django.utils import timezone
 from django.contrib.auth import authenticate, login
-from .models import *
 from .forms import *
 
 
@@ -22,12 +20,14 @@ def Registration(request):
 
 
 def FormPost(request):
-    posts = Post.objects.all()
+    posts = Post.objects.filter(status='published')
     error = ''
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            form.save()
+            new_post = form.save()
+            new_post.user = request.user
+            new_post.save()
             return redirect('Home_Page')
         else:
             error = 'данные введены некорректно'
@@ -39,11 +39,16 @@ def FormPost(request):
     return render(request, 'AddPost.html', data)
 
 
-def Home(request):
+def objects():
     user = User.objects.all()
-    posts = Post.objects.all()
+    posts = Post.objects.filter(status='published', )
     comments = Comment.objects.all()
-    comment = Comment.objects.filter(commented_post=posts)
+    comment = Comment.objects.filter(commented_post=posts, )
+    return user, posts, comments, comment
+
+
+def Home(request):
+    user, posts, comments, comment = objects()
     error = ''
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -65,3 +70,29 @@ def Home(request):
         'user': user,
     }
     return render(request, 'Home.html', data)
+
+
+def AddComment(request, POST):
+    post = get_object_or_404(Post, slug=POST,
+                             status='published')
+    user, posts, comments, comment = objects()
+    error = ''
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            new_comment = form.save()
+            new_comment.commented_post = post
+            new_comment.user = request.user
+            new_comment.save()
+
+
+            return redirect('/')
+    else:
+        error = 'данные введены некорректно'
+    form = CommentForm()
+    data = {'post': post,
+            'posts': posts,
+            'comments': comments,
+            'form': form,
+            'error': error, }
+    return render(request, 'Post.html', data)

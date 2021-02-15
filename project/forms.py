@@ -6,7 +6,7 @@ from .models import Post, Comment, User
 class PostForm(ModelForm):
     class Meta:
         model = Post
-        fields = ['user','slug', 'text_post']
+        fields = ['slug', 'text_post']
 
         widgets = {
             'slug': TextInput(attrs={
@@ -20,17 +20,25 @@ class PostForm(ModelForm):
         }
 
 
-class CommentForm(forms.ModelForm):
+'''class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['commented_post', 'text_comment', 'user']
+        fields = [ 'text_comment', 'user']
 
         widgets = {
             'text_comment': TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'комментарий'
             }),
-        }
+
+        }'''
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text_comment', )
+#f = CommentForm(initial={'commented_post': 'commented_post'})
+
 
 class LoginForm(forms.Form):
     username = forms.CharField()

@@ -4,32 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{% static "filecss.css" %}"/>
-    <title>Главная</title>
+    <title>{% block title %} Главная{% endblock title %}</title>
 </head>
 <body>
-<h1>
-    <a href="AddPosts/">добавить пост</a>
-</h1>
+{% block all %}
+    <h1>
+        <a href="AddPosts/">добавить пост</a>
+    </h1>
 
-{% for post in posts %}
-    {{ post.user }}<br>
-    <p>пост >>{{ post.slug }} текст>> {{ post.text_post }} опубликован: {{ post.post_date_published }}</p>
-    <form method="post">
-        {% csrf_token %}
-        {{ form }}
-        <button class="btn btn-success" type="submit">Добавить комментарий!</button>
-    </form>
-    <p> {% for comment in comments %}
-        {% if post.id == comment.commented_post.id %}
-                        Пользователь {{ comment.user }}<br>
-            <p>комменченый пост >> {{ comment.commented_post }} текст коммента {{ comment.text_comment }}
-                опубликован: {{ comment.comment_date_published }}</p>
+    {% for post in posts %}
+        {{ post.user }}<br>
+        <a href="{{ post.get_absolute_url }}"><p>пост >>{{ post.slug }} текст>> {{ post.text_post }}
+            опубликован: {{ post.post_date_published }}</p></a>
 
-        {% endif %}
+        <p> {% for comment in comments %}
+            {% if post.id == comment.commented_post.id %}
+                Пользователь {{ comment.user }}<br>
+                <p>комменченый пост >> {{ comment.commented_post }} текст коммента {{ comment.text_comment }}
+                    опубликован: {{ comment.comment_date_published }}</p>
+
+            {% endif %}
+        {% endfor %}
+        ______________________________________________________________________________<br>
     {% endfor %}
-      ______________________________________________________________________________
-{% endfor %}
-
+{% endblock all %}
 
 </body>
 </html>

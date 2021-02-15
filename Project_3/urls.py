@@ -6,4 +6,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^account/', include('project.urls')),
     path('', include('project.urls')),
+    url(r'^project/', include(('project.urls', 'project'),
+                              namespace='project', ), )
 ]
