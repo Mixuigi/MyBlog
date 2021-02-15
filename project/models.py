@@ -40,8 +40,3 @@ class Comment(models.Model):
         return f' {self.text_comment} by {self.user} on {self.commented_post}'
        # return self.text_comment
 
-
-
-    # def com_was_published_recently(self):
-    # self.comment_date_published = timezone.now()
-    # self.save()
