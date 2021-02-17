@@ -19,25 +19,10 @@ class PostForm(ModelForm):
             }),
         }
 
-
-'''class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        fields = [ 'text_comment', 'user']
-
-        widgets = {
-            'text_comment': TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'комментарий'
-            }),
-
-        }'''
-
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ('text_comment', )
-#f = CommentForm(initial={'commented_post': 'commented_post'})
 
 
 class LoginForm(forms.Form):
