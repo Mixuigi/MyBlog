@@ -1,9 +1,13 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
+from django.urls import reverse_lazy
+from django.views import generic
+
 from .forms import *
+from django.contrib.auth.forms import UserCreationForm
 
 
-def Registration(request):
+def Authentication(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -17,6 +21,22 @@ def Registration(request):
     else:
         form = LoginForm()
     return render(request, 'login.html', {'form': form})
+
+
+class RegistrationForm(UserCreationForm):
+    # first_name = forms.CharField(
+    #   required=False,
+    #  label='First Name'
+    # )
+
+    class Meta(UserCreationForm.Meta):
+        fields = (*UserCreationForm.Meta.fields,)  # 'first_name')
+
+
+class SignUpView(generic.CreateView):
+    form_class = RegistrationForm
+    success_url = reverse_lazy('Home_Page')
+    template_name = 'Register.html'
 
 
 def FormPost(request):
@@ -57,6 +77,9 @@ def AddComment(request, POST):
     post = get_object_or_404(Post, slug=POST,
                              status='published')
     user, posts, comments, comment = objects()
+    data = {'post': post,
+            'posts': posts,
+            'comments': comments, }
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -64,7 +87,7 @@ def AddComment(request, POST):
             new_comment.commented_post = post  # присваивание комменту slug поста
             new_comment.user = request.user  # присваивание комменту юзера
             new_comment.save()
-            return redirect("/")
+            return render(request, 'Post.html', data)
     form = CommentForm()
     data = {'post': post,
             'posts': posts,
